@@ -41,7 +41,7 @@ import edu.wpi.first.cscore.UsbCamera;
 
 
 
-public class RobotWithNewUltrasonic extends TimedRobot {
+public class NewRobotFrThisTime extends TimedRobot {
 
   //Motors
   // TalonSRX talonLeft = new TalonSRX(5);
@@ -52,28 +52,44 @@ public class RobotWithNewUltrasonic extends TimedRobot {
 
   // Camera
 
+//driving motors
 
-  PWMVictorSPX leftMotor = new PWMVictorSPX(2);
-  PWMVictorSPX rightMotor = new PWMVictorSPX(3);
-  public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); // insert drive here
+  //PWMVictorSPX leftMotor = new PWMVictorSPX(2);
+  //PWMVictorSPX rightMotor = new PWMVictorSPX(3);
+
+  //all ports are being assumed, like thy mother's gender
+  CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
+  CANSparkMax rightFront = new CANSparkMax(2, MotorType.kBrushless);
+  CANSparkMax leftBack = new CANSparkMax(3, MotorType.kBrushless);
+  CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
+  public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); //TODO: Change drive mode
 
 
+//shooting
+/*
   CANSparkMax flyWheelMotor = new CANSparkMax(10, MotorType.kBrushless);
   RelativeEncoder flyWheelEncoder = flyWheelMotor.getEncoder();
+*/
 
+//intake
+/*
   CANSparkMax feederMotor = new CANSparkMax(11, MotorType.kBrushless);
+*/
 
+//climbing
+/*
   PWMVictorSPX intakeMotor = new PWMVictorSPX(5); // assuming 1 
   PWMVictorSPX climbMotor = new PWMVictorSPX(4); // This is correct
   // PWMVictorSPX feederMotor = new PWMVictorSPX(5);
-
+*/
 
   //Pneumatics
+  /*
   Compressor comp = new Compressor(0, PneumaticsModuleType.CTREPCM);
   DoubleSolenoid boost = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 7);
   DoubleSolenoid intakeFold = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 6);
   DoubleSolenoid climbLock = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 5);
-
+*/
 
 
   // DoubleSolenoid floats = new DoubleSolenoid(4,3);
@@ -82,8 +98,8 @@ public class RobotWithNewUltrasonic extends TimedRobot {
 
   //data
   private final Timer timer = new Timer();
-  private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-  // private double angle = 0;
+  //private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  //private double angle = 0;
 
   //public boolean climbUp = false;
   //control
@@ -99,7 +115,7 @@ public class RobotWithNewUltrasonic extends TimedRobot {
   public boolean lightOn = false;
   public double lightValue = 0.0;
   
-  Ultrasonic ultrasonic = new Ultrasonic(1, 2);//not sure if this correct
+  AnalogInput ultrasonic = new AnalogInput(0);
   private static final double vtd = 1/0.023 ;
   // 24 inches ~ 0.57v ~0.024
   // 36 inches ~ 0.86v ~0.0239
@@ -112,7 +128,7 @@ public class RobotWithNewUltrasonic extends TimedRobot {
 
   //LED init
   //https://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf pg 14
-  Spark led = new Spark(0);
+  //Spark led = new Spark(0);
 
 
  //initalize trigger buttons
@@ -131,7 +147,7 @@ public class RobotWithNewUltrasonic extends TimedRobot {
     // arm.set(Value.kForward);
     
     // lock.set(Value.kReverse);
-    gyro.calibrate();
+    //gyro.calibrate();
 
     System.out.println("go in");
     boost.set(Value.kForward);
@@ -146,7 +162,7 @@ public class RobotWithNewUltrasonic extends TimedRobot {
   
     rightMotor.setInverted(true);
 
-    Ultrasonic.setAutomaticMode(true);
+
 
     /**
      * The RestoreFactoryDefaults method can be used to reset the configuration parameters
@@ -227,7 +243,7 @@ public class RobotWithNewUltrasonic extends TimedRobot {
 
   public void scoreHighULTRASONIC(){
     //fiddle with distance
-    while (ultrasonic.getRangeInches() > 1){//this is like so wrong btw
+    while (ultrasonic.getVoltage()*vtd > 1){
       // drive back
       drive.tankDrive(0.6, 0.6);
     }
@@ -254,46 +270,31 @@ public class RobotWithNewUltrasonic extends TimedRobot {
   @Override
   public void teleopInit() {
     climbLock.set(Value.kReverse);
-    intakeFoldState = Value.kReverse;
-    led.set(-0.23);
+    led.set(-0.99);
 
     // gyro.reset();
   }   
 
-  boolean turning = false;
 
-  public void Turn180(){
-    double curT = timer.get();//current time
-    double curAn = gyro.getAngle();//current angle
-    final double period = 1;//max turn time
-    if(curT-period<=0){
-      if(curAn-180<0||curAn+180>0){
-        drive.tankDrive(1, -1);
-      } else{
-        drive.stopMotor();
-      }
-    }
-  }
-
-
-  // double aTarget = 0, bTarget = 0; // a for a button, b for bumpers
+  // double aTarget = 0, bTarget = 0; // a for a button, b for bumpers"
   boolean compressing = false;
 
 
   @Override
   public void teleopPeriodic() {
 
-    System.out.println(gyro.getAngle());
+    //System.out.println(gyro.getAngle());
 
     feederSpeed = 0.0;
     climbSpeed = 0.0;
     intakeSpeed = 0.0;
+    intakeFoldState = Value.kReverse;
     flyWheelMode = 0;
 
 
     // DRIVING SYSTEM
     double forwardSpeed = c1.getLeftY() + c1.getRightY()*0.5;
-    double turnSpeed = c1.getLeftX()*0.75 + c1.getRightX()*0.55;
+    double turnSpeed = c1.getLeftX()*0.75 + c1.getRightX()*0.67;
 
     if (forwardSpeed > 1)
       forwardSpeed = 1;
@@ -394,33 +395,42 @@ public class RobotWithNewUltrasonic extends TimedRobot {
       lockState = !lockState;
       climbLock.toggle();
     }
-
+    /*
     //Turns 180 with Controller 1 B button
-    
     if(c1.getBButtonPressed()){
-      if(turning==false){
-        turning = true;
-        timer.reset();
-        timer.start();
-        gyro.reset();
-      }
-      if(turning==true){
-        Turn180();
+      timer.reset();
+      timer.start();
+      gyro.reset();
+      double curT = timer.get();//current time
+      double curAn = gyro.getAngle();//current angle
+      final double period = 0.5;//max turn time
+      //or this: final double An = gyro.getAngle();
+      while(curT-period<=0){
+        curAn = gyro.getAngle();
+        curT = timer.get();
+        //use gyro
+        if(curAn-180<0||curAn+180>0){
+          drive.tankDrive(1, -1);
+        } else{
+          drive.stopMotor();
+          break;
+        }
       }
     }
+    */
     
-    double ultrasonicDist = ultrasonic.getRangeInches();
+    double ultrasonicDist = ultrasonic.getVoltage()*vtd;
     
-    if(ultrasonicDist<1){//42*0.023
+    if(ultrasonicDist<42){
       led.set(-0.99);
-    } else if(ultrasonicDist<1.15){//50*0.023
+    } else if(ultrasonicDist<50){
       // set to flashing orange
       led.set(0.65);
-    }else if(ultrasonicDist <= 1.45){//62*0.023
+    }else if(ultrasonicDist <= 62){
       //LIGHTS ARE GREEN
       System.out.println("in range");
       led.set(0.77);
-    }else if(ultrasonicDist <=1.6){//70*0.023
+    }else if(ultrasonicDist <= 70){
       //violet
       led.set(0.91);
     } else{
@@ -435,7 +445,8 @@ public class RobotWithNewUltrasonic extends TimedRobot {
       SmartDashboard.putNumber("Flywheel Encoder", flyWheelEncoder.getVelocity());
       SmartDashboard.putNumber("Ultrasonic Distance", ultrasonicDist);
       SmartDashboard.putBoolean("Climb Lock Activated", lockState);
-      SmartDashboard.putNumber("Ultrasonic Distance Inches", ultrasonic.getRangeInches());
+      SmartDashboard.putNumber("Ultrasonic Voltage", ultrasonic.getVoltage());
+      SmartDashboard.putNumber("Ultrasonic Distance", ultrasonic.getVoltage()*vtd);
     }
 
 
