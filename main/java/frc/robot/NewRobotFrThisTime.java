@@ -62,7 +62,8 @@ public class NewRobotFrThisTime extends TimedRobot {
   CANSparkMax rightFront = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax leftBack = new CANSparkMax(3, MotorType.kBrushless);
   CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
-  public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); //TODO: Change drive mode
+  MecanumDrive mDrive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
+  //public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); //TODO: Change drive mode
 
 
 //shooting
@@ -159,8 +160,10 @@ public class NewRobotFrThisTime extends TimedRobot {
     intakeMotor.set(intakeSpeed);
 
     
-  
-    rightMotor.setInverted(true);
+    //Inverts right side
+    //TODO: test to make sure it's the right side
+    rightFront.setInverted(true);
+    rightBack.setInverted(true);
 
 
 
@@ -304,9 +307,13 @@ public class NewRobotFrThisTime extends TimedRobot {
 
 
     
+    //TODO: test
+    mDrive.driveCartesian(-m_stick.getY(), m_stick.getX(), m_stick.getZ()); //TODO: ok wtf am I doing here
+    //TODO: Here's a link, help.
+    //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
 
     // DO NOT TOUCH
-    drive.arcadeDrive(forwardSpeed, -turnSpeed, true); // DO NOT TOUCH
+    //drive.arcadeDrive(forwardSpeed, -turnSpeed, true); // DO NOT TOUCH
     // DO NOT TOUCH ^
 
 
