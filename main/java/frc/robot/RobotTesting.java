@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
@@ -62,7 +63,7 @@ public class RobotTesting extends TimedRobot {
   CANSparkMax rightFront = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax leftBack = new CANSparkMax(3, MotorType.kBrushless);
   CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
-  MecanumDrive mDrive;
+  MecanumDrive m_drive;
 
 
 //shooting
@@ -151,7 +152,7 @@ public class RobotTesting extends TimedRobot {
     
     // lock.set(Value.kReverse);
     //gyro.calibrate();
-
+/*
     System.out.println("go in");
     boost.set(Value.kForward);
     climbLock.set(Value.kReverse);
@@ -160,6 +161,7 @@ public class RobotTesting extends TimedRobot {
     flyWheelMotor.set(0);
     climbMotor.set(0);
     intakeMotor.set(intakeSpeed);
+    */
 
     
     m_drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
@@ -179,14 +181,14 @@ public class RobotTesting extends TimedRobot {
      */
 
     
-    flyWheelMotor.restoreFactoryDefaults();
+    //flyWheelMotor.restoreFactoryDefaults();
 
     //LED and Cam
     UsbCamera frontCam = CameraServer.startAutomaticCapture(0);
     UsbCamera intakeCamera = CameraServer.startAutomaticCapture(1);
     intakeCamera.setResolution(283,160);
 
-    led.set(0.99);
+    //led.set(0.99);
   
   }
 
@@ -208,6 +210,7 @@ public class RobotTesting extends TimedRobot {
 
   }
 
+    /*
   private void scoreTaxi(){
     // score 2 points by driving off the starting tarmac
     if (timer.get() < 1.5){
@@ -216,7 +219,7 @@ public class RobotTesting extends TimedRobot {
       drive.stopMotor();
     }
   }
-
+*/
   /* Not Used?
   private void shoot(){
    if (timer.get() < 5){
@@ -226,7 +229,7 @@ public class RobotTesting extends TimedRobot {
     }
   }
   */
-
+/*
   public void scoreHigh(){
     climbLock.set(Value.kReverse);
     //fiddle with distance
@@ -248,7 +251,8 @@ public class RobotTesting extends TimedRobot {
       drive.stopMotor();
     }
   }
-
+  */
+/*
   public void scoreHighULTRASONIC(){
     //fiddle with distance
     while (ultrasonic.getVoltage()*vtd > 1){
@@ -268,6 +272,7 @@ public class RobotTesting extends TimedRobot {
     }
 
   }
+  */
 
   @Override
   public void autonomousPeriodic() {
@@ -278,8 +283,8 @@ public class RobotTesting extends TimedRobot {
   @Override
   public void teleopInit() {
     m_drive.setSafetyEnabled(true);
-    climbLock.set(Value.kReverse);
-    led.set(-0.99);
+    //climbLock.set(Value.kReverse);
+    //led.set(-0.99);
 
     // gyro.reset();
   }   
@@ -302,7 +307,7 @@ public class RobotTesting extends TimedRobot {
 
     
     //TODO: test
-    mDrive.driveCartesian(c1.getY(), c1.getX(), c1.getZ(), 0);
+    m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV(), 0);
     //TODO: Here's a link, help.
     //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
     //TODO: Link to hard code the motors
@@ -395,7 +400,7 @@ public class RobotTesting extends TimedRobot {
     if (c1.getXButtonPressed())
     {
       lockState = !lockState;
-      climbLock.toggle();
+      //climbLock.toggle();
     }
     /*
     //Turns 180 with Controller 1 B button
@@ -422,7 +427,7 @@ public class RobotTesting extends TimedRobot {
     */
     
     double ultrasonicDist = ultrasonic.getVoltage()*vtd;
-    
+    /*
     if(ultrasonicDist<42){
       led.set(-0.99);
     } else if(ultrasonicDist<50){
@@ -439,19 +444,19 @@ public class RobotTesting extends TimedRobot {
       led.set(-0.99);
       // System.out.println("NOT IN RANGE NOT IN RANGE");
     }
-
+*/
     // if(c.getLeftBumperPressed()) // decrement flywheel speed when left bumper pressed.
       // lock.set(Value.kForward);
 
     if (stats){
-      SmartDashboard.putNumber("Flywheel Encoder", flyWheelEncoder.getVelocity());
+      //SmartDashboard.putNumber("Flywheel Encoder", flyWheelEncoder.getVelocity());
       SmartDashboard.putNumber("Ultrasonic Distance", ultrasonicDist);
       SmartDashboard.putBoolean("Climb Lock Activated", lockState);
       SmartDashboard.putNumber("Ultrasonic Voltage", ultrasonic.getVoltage());
       SmartDashboard.putNumber("Ultrasonic Distance", ultrasonic.getVoltage()*vtd);
     }
 
-
+/*
     intakeMotor.set(intakeSpeed); // PWM 
     feederMotor.set(feederSpeed); // CAN
     flyWheelMotor.set(-flyWheelSpeeds[flyWheelMode]); //CAN
@@ -460,7 +465,7 @@ public class RobotTesting extends TimedRobot {
 
     intakeFold.set(intakeFoldState); // pneumatics
 
-
+*/
     
     System.out.println(lightValue);
   }
