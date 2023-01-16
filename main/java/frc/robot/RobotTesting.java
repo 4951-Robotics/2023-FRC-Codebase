@@ -52,7 +52,7 @@ public class RobotTesting extends TimedRobot {
 
   // Camera
 
-//driving motors
+  //driving motors
 
   //PWMVictorSPX leftMotor = new PWMVictorSPX(2);
   //PWMVictorSPX rightMotor = new PWMVictorSPX(3);
@@ -62,8 +62,7 @@ public class RobotTesting extends TimedRobot {
   CANSparkMax rightFront = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax leftBack = new CANSparkMax(3, MotorType.kBrushless);
   CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
-  MecanumDrive mDrive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
-  //public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor); //TODO: Change drive mode
+  MecanumDrive mDrive;
 
 
 //shooting
@@ -106,6 +105,8 @@ public class RobotTesting extends TimedRobot {
   //control
   private final XboxController c1 = new XboxController(0);
   private final XboxController c2 = new XboxController(1);
+
+  
   public double intakeSpeed = 0.0;
   public double climbSpeed = 0.0;
   public boolean lockState = false;
@@ -121,6 +122,7 @@ public class RobotTesting extends TimedRobot {
   // 24 inches ~ 0.57v ~0.024
   // 36 inches ~ 0.86v ~0.0239
   // 48 inches ~ 1.02v ~0.0212
+
 
   // 0.023 v per inch
 
@@ -160,6 +162,9 @@ public class RobotTesting extends TimedRobot {
     intakeMotor.set(intakeSpeed);
 
     
+    m_drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
+    m_drive.setExpiration(0.1);
+
     //Inverts right side
     //TODO: test to make sure it's the right side
     rightFront.setInverted(true);
@@ -199,7 +204,7 @@ public class RobotTesting extends TimedRobot {
   public void autonomousInit() {
     timer.reset();
     timer.start();
-    climbLock.set(Value.kReverse);
+    //climbLock.set(Value.kReverse);
 
   }
 
@@ -267,11 +272,12 @@ public class RobotTesting extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // scoreTaxi();
-    scoreHigh();
+    //scoreHigh();
   }
 
   @Override
   public void teleopInit() {
+    m_drive.setSafetyEnabled(true);
     climbLock.set(Value.kReverse);
     led.set(-0.99);
 
@@ -294,24 +300,13 @@ public class RobotTesting extends TimedRobot {
     intakeFoldState = Value.kReverse;
     flyWheelMode = 0;
 
-
-    // DRIVING SYSTEM
-    double forwardSpeed = c1.getLeftY() + c1.getRightY()*0.5;
-    double turnSpeed = c1.getLeftX()*0.75 + c1.getRightX()*0.67;
-
-    if (forwardSpeed > 1)
-      forwardSpeed = 1;
-
-    if (turnSpeed > 1)
-      turnSpeed = 1;
-
-
     
     //TODO: test
-    mDrive.driveCartesian(-m_stick.getY(), m_stick.getX(), m_stick.getZ()); //TODO: ok wtf am I doing here
+    mDrive.driveCartesian(c1.getY(), c1.getX(), c1.getZ(), 0);
     //TODO: Here's a link, help.
     //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
-
+    //TODO: Link to hard code the motors
+    //https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html
     // DO NOT TOUCH
     //drive.arcadeDrive(forwardSpeed, -turnSpeed, true); // DO NOT TOUCH
     // DO NOT TOUCH ^
