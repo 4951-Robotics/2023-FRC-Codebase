@@ -41,7 +41,7 @@ import edu.wpi.first.cscore.UsbCamera;
 
 
 
-public class OldRobot extends TimedRobot {
+public class Robot extends TimedRobot {
 
   //Motors
   // TalonSRX talonLeft = new TalonSRX(5);
@@ -83,7 +83,7 @@ public class OldRobot extends TimedRobot {
   //data
   private final Timer timer = new Timer();
   //private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
- // private double angle = 0;
+  //private double angle = 0;
 
   //public boolean climbUp = false;
   //control
@@ -111,6 +111,7 @@ public class OldRobot extends TimedRobot {
   boolean stats = true;
 
   //LED init
+  //https://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf pg 14
   Spark led = new Spark(0);
 
 
@@ -266,6 +267,8 @@ public class OldRobot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    //System.out.println(gyro.getAngle());
+
     feederSpeed = 0.0;
     climbSpeed = 0.0;
     intakeSpeed = 0.0;
@@ -320,7 +323,7 @@ public class OldRobot extends TimedRobot {
       feederSpeed = 0.4;
     }
 
-
+/*
     //why can they change light value tho?
     if(c1.getBButton())
     {
@@ -340,7 +343,7 @@ public class OldRobot extends TimedRobot {
     }
     led.set(lightValue);
 
-
+*/
 
     // FLYWHEEL SYSTEM |  CONTROLLER 2 controlled by bumpers, RIGHT BUMPER increment speed, capped at highest speed, LEFT BUMPER reset speed to 0
 
@@ -376,26 +379,48 @@ public class OldRobot extends TimedRobot {
       lockState = !lockState;
       climbLock.toggle();
     }
-
+    /*
+    //Turns 180 with Controller 1 B button
+    if(c1.getBButtonPressed()){
+      timer.reset();
+      timer.start();
+      gyro.reset();
+      double curT = timer.get();//current time
+      double curAn = gyro.getAngle();//current angle
+      final double period = 0.5;//max turn time
+      //or this: final double An = gyro.getAngle();
+      while(curT-period<=0){
+        curAn = gyro.getAngle();
+        curT = timer.get();
+        //use gyro
+        if(curAn-180<0||curAn+180>0){
+          drive.tankDrive(1, -1);
+        } else{
+          drive.stopMotor();
+          break;
+        }
+      }
+    }
+    */
     
     double ultrasonicDist = ultrasonic.getVoltage()*vtd;
     
-    
-    if(50 <= ultrasonicDist && ultrasonicDist <= 62){
-      //LIGHTS ARE GREEN
-      System.out.println("in range");
-      led.set (0.77);
-    }else if(42 <= ultrasonicDist && ultrasonicDist <= 70){ // 8 up 8 down range, for when we are apporaching shooting range
+    if(ultrasonicDist<42){
+      led.set(-0.99);
+    } else if(ultrasonicDist<50){
       // set to flashing orange
       led.set(0.65);
-    }else if(1000 <= ultrasonicDist && ultrasonicDist <= -1){ // low goal zone
-      // to be implemented
-      led.set(0.57);
-    }else{
+    }else if(ultrasonicDist <= 62){
+      //LIGHTS ARE GREEN
+      System.out.println("in range");
+      led.set(0.77);
+    }else if(ultrasonicDist <= 70){
+      //violet
+      led.set(0.91);
+    } else{
       led.set(-0.99);
       // System.out.println("NOT IN RANGE NOT IN RANGE");
     }
-
 
     // if(c.getLeftBumperPressed()) // decrement flywheel speed when left bumper pressed.
       // lock.set(Value.kForward);
@@ -436,3 +461,4 @@ public class OldRobot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 }
+
