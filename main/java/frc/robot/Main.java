@@ -23,6 +23,7 @@ public final class Main {
 
     //Robot is new/exprimental code, OldRobot is always the one that has been proven to work
     //RobotBase.startRobot(Robot::new);
-    RobotBase.startRobot(OldRobot::new);
+    //RobotBase.startRobot(OldRobot::new);
+    RobotBase.startRobot(RobotTesting::new);
   }
 }

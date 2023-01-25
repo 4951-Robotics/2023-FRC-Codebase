@@ -58,11 +58,11 @@ public class RobotTesting extends TimedRobot {
   //PWMVictorSPX leftMotor = new PWMVictorSPX(2);
   //PWMVictorSPX rightMotor = new PWMVictorSPX(3);
 
-  //all ports are being assumed, like thy mother's gender
-  CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
-  CANSparkMax rightFront = new CANSparkMax(2, MotorType.kBrushless);
-  CANSparkMax leftBack = new CANSparkMax(3, MotorType.kBrushless);
-  CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
+  //checked
+  CANSparkMax leftFront = new CANSparkMax(2, MotorType.kBrushless);
+  CANSparkMax rightFront = new CANSparkMax(3, MotorType.kBrushless);
+  CANSparkMax leftBack = new CANSparkMax(0, MotorType.kBrushless);
+  CANSparkMax rightBack = new CANSparkMax(1, MotorType.kBrushless);
   MecanumDrive m_drive;
 
 
@@ -307,7 +307,7 @@ public class RobotTesting extends TimedRobot {
 
     
     //TODO: test
-    m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV(), 0);
+    m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV());
     //TODO: Here's a link, help.
     //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
     //TODO: Link to hard code the motors
