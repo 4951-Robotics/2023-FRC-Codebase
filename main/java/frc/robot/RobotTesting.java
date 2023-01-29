@@ -308,6 +308,26 @@ public class RobotTesting extends TimedRobot {
     
     //TODO: test
     m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV());
+    //if prev doesn't work, try this
+    /*
+    double y = -c1.getLeftY(); // Remember, this is reversed!
+    double x = c1.getLeftX() * 1.1; // Counteract imperfect strafing
+    //double rx = c1.getRightX();
+
+    // Denominator is the largest motor power (absolute value) or 1
+    // This ensures all the powers maintain the same ratio, but only when
+    // at least one is out of the range [-1, 1]
+    double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+    double frontLeftPower = (y + x + rx) / denominator;
+    double backLeftPower = (y - x + rx) / denominator;
+    double frontRightPower = (y - x - rx) / denominator;
+    double backRightPower = (y + x - rx) / denominator;
+
+    leftFront.setPower(frontLeftPower);
+    leftBack.setPower(backLeftPower);
+    rightFront.setPower(frontRightPower);
+    rightBack.setPower(backRightPower);
+     */
     //TODO: Here's a link, help.
     //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
     //TODO: Link to hard code the motors
