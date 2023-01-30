@@ -58,13 +58,20 @@ public class RobotTesting extends TimedRobot {
   //PWMVictorSPX leftMotor = new PWMVictorSPX(2);
   //PWMVictorSPX rightMotor = new PWMVictorSPX(3);
 
-  //checked
+  //new motors
+  /*
   CANSparkMax leftFront = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax rightFront = new CANSparkMax(3, MotorType.kBrushless);
   CANSparkMax leftBack = new CANSparkMax(0, MotorType.kBrushless);
   CANSparkMax rightBack = new CANSparkMax(1, MotorType.kBrushless);
-  MecanumDrive m_drive;
+  */
+  //old motors
+  VictorSPX test = new VictorSPX(4);
+  //or
+  PWMVictorSPX test1 = new PWMVictorSPX(3);
 
+
+  MecanumDrive m_drive;
 
 //shooting
 /*
