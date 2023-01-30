@@ -282,7 +282,7 @@ public class RobotTesting extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_drive.setSafetyEnabled(true);
+    m_drive.setSafetyEnabled(false);
     //climbLock.set(Value.kReverse);
     //led.set(-0.99);
 
@@ -307,12 +307,13 @@ public class RobotTesting extends TimedRobot {
 
     
     //TODO: test
-    m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV());
+    //m_drive.driveCartesian(c1.getLeftY(), c1.getLeftX(), c1.getPOV());
     //if prev doesn't work, try this
-    /*
+    ///*
     double y = -c1.getLeftY(); // Remember, this is reversed!
     double x = c1.getLeftX() * 1.1; // Counteract imperfect strafing
-    //double rx = c1.getRightX();
+    double rx = c1.getRightX();
+    System.out.println(y+", "+x);
 
     // Denominator is the largest motor power (absolute value) or 1
     // This ensures all the powers maintain the same ratio, but only when
@@ -322,12 +323,14 @@ public class RobotTesting extends TimedRobot {
     double backLeftPower = (y - x + rx) / denominator;
     double frontRightPower = (y - x - rx) / denominator;
     double backRightPower = (y + x - rx) / denominator;
+    
+    System.out.println(frontRightPower+", "+frontLeftPower);
 
-    leftFront.setPower(frontLeftPower);
-    leftBack.setPower(backLeftPower);
-    rightFront.setPower(frontRightPower);
-    rightBack.setPower(backRightPower);
-     */
+    leftFront.set(frontLeftPower);
+    leftBack.set(backLeftPower);
+    rightFront.set(frontRightPower);
+    rightBack.set(backRightPower);
+    //*/
     //TODO: Here's a link, help.
     //https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html#mecanum-drive
     //TODO: Link to hard code the motors
